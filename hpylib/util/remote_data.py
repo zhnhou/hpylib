@@ -26,4 +26,4 @@ def info_host(hostname):
 def sync_from_remote(hostname, filename):
     
     user, url = info_host(hostname)
-
+    filename
