@@ -1,38 +1,39 @@
 import numpy as np
 import os
+from sys import exit
 
 def info_host(hostname):
-    if (str.upper(hostname) is 'MIDWAY'):
+    if (str.upper(hostname) == 'MIDWAY'):
         user = 'zhenhou'
         url  = 'midway.rcc.uchicago.edu'
-    else if (str.upper(hostname) is 'CORI'):
+    elif (str.upper(hostname) == 'CORI'):
         user = 'hou'
         url  = 'cori.nersc.gov'
-    else if (str.upper(hostname) is 'EDISON'):
+    elif (str.upper(hostname) == 'EDISON'):
         user = 'hou'
         url  = 'edison.nersc.gov'
-    else if (str.upper(hostname) is 'SPT'):
+    elif (str.upper(hostname) == 'SPT'):
         user = 'hou'
         url  = 'spt.uchicago.edu'
-    else if (str.upper(hostname) is 'CLOUD'):
+    elif (str.upper(hostname) == 'CLOUD'):
         user = 'hou'
         url  = 'sptcloud.uchicago.edu'
     else:
         print "hmm, maybe I am thinking of AWS?"
         exit()
 
-    return user, url
+    return [user, url]
 
 
 def sync_from_remote(hostname, filename):
 
     # filename is the file name including the absolute path on remote machine
-    
+    home_path = os.getenv('HOME')+'/'
     user, url = info_host(hostname)
     dat_pastr = '/data_'+str.lower(hostname)+'/'
     sub_index = filename.find(dat_pastr)
 
-    filename_local = '~/data_local/'+filename[sub_index+len(dat_pastr):]
+    filename_local = home_path+'data_local/'+filename[sub_index+len(dat_pastr):]
     path_index = filename_local.rfind('/')
     path_local = filename_local[0:path_index]
 
