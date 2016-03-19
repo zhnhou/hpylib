@@ -1,4 +1,5 @@
 import numpy as np
+import os
 
 def info_host(hostname):
     if (str.upper(hostname) is 'MIDWAY'):
@@ -24,6 +25,18 @@ def info_host(hostname):
 
 
 def sync_from_remote(hostname, filename):
+
+    # filename is the file name including the absolute path on remote machine
     
     user, url = info_host(hostname)
-    filename
+    dat_pastr = '/data_'+str.lower(hostname)+'/'
+    sub_index = filename.find(dat_pastr)
+
+    filename_local = '~/data_local/'+filename[sub_index+len(dat_pastr):]
+    path_index = filename_local.rfind('/')
+    path_local = filename_local[0:path_index]
+
+    if not os.path.exists(path_local):
+        os.makedirs(path_local)
+
+    os.system("scp "+user+"@"+url+":"+filename+" "+filename_local)
