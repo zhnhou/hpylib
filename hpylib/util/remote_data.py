@@ -37,7 +37,7 @@ def sync_from_remote(hostname, filename):
     filename_local = home_path+'data_local/'+filename[sub_index+len(dat_pastr):]
 
     if os.path.isfile(filename_local):
-        return 0
+        return filename_local
 
     path_index = filename_local.rfind('/')
     path_local = filename_local[0:path_index]
@@ -45,4 +45,5 @@ def sync_from_remote(hostname, filename):
     if not os.path.exists(path_local):
         os.makedirs(path_local)
 
-    return os.system("scp "+user+"@"+url+":"+filename+" "+filename_local)
+    os.system("scp "+user+"@"+url+":"+filename+" "+filename_local)
+    return filename_local
