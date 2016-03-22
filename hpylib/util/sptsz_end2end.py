@@ -1,8 +1,8 @@
 import numpy as np
-from hpylib.util.remote_data import *
+from scipy.io.idl import readsav
 from sys import exit
 
-def restore_save(savfile):
+def restore_end_save(savfile):
 
     n = readsav(savfile)
     key = n.keys()

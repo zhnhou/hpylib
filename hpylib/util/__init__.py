@@ -1,1 +1,1 @@
-__all__ = ['remote_data']
+__all__ = ['remote_data', 'sptsz_end2end']
