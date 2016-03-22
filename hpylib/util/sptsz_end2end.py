@@ -30,3 +30,27 @@ def restore_end_save(savfile):
          'cov_sv':cov_sv, 'cov_noise':cov_noise}
 
     return d
+
+def dls2dbs(dls_theory, winfunc, winminell=0, winmaxell=None):
+    dim = np.shape(dls_theory)
+    nspecs = dim[0]
+    lmax   = dim[1] - 1
+
+    if winmaxell is None:
+        winmaxell = lmax
+
+    dim = np.shape(winfunc)
+    if dim[0] != nspecs or dim[2] != winmaxell-winminell+1:
+        exit("check the dimention of dls_theory and winfunc")
+
+    num_bands = dim[1]
+
+    dbs_theory = np.zeros((nspecs, num_bands))
+    for i in np.arange(nspecs):
+        dbs_theory[i,:] = np.dot(winfunc[i,:,:], np.transpose(dls_theory[i,winminell:winmaxell+1]))
+
+    return dbs_theory
+
+    
+        
+    
