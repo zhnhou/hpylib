@@ -25,7 +25,7 @@ def info_host(hostname):
     return [user, url]
 
 
-def sync_from_remote(hostname, filename):
+def sync_from_remote(hostname, filename, update=False):
 
     # filename is the file name including the absolute path on remote machine
 
@@ -36,7 +36,7 @@ def sync_from_remote(hostname, filename):
 
     filename_local = home_path+'data_local/'+filename[sub_index+len(dat_pastr):]
 
-    if os.path.isfile(filename_local):
+    if os.path.isfile(filename_local) and (not update):
         return filename_local
 
     path_index = filename_local.rfind('/')

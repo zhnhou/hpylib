@@ -1,1 +1,1 @@
-__all__ = ['get_pspec_param']
+__all__ = ['get_pspec_param', 'read_planck_data']

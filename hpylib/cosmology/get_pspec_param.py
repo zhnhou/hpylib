@@ -1,6 +1,7 @@
 import numpy as np
 import camb
 from camb import model, initialpower
+import cPickle as pickle
 
 def get_params(path, prefix):
     param_file = path + '/' + prefix + '.txt'
@@ -25,7 +26,7 @@ def get_params(path, prefix):
 
     return d
 
-def calc_pspec(param, lmax=None):
+def calc_pspec(param, lmax=None, output_root=None):
 
     num_sample = param['num_sample']
 
@@ -45,10 +46,12 @@ def calc_pspec(param, lmax=None):
         pars.set_for_lmax(lmax, lens_potential_accuracy=1)
 
         results = camb.get_results(pars)
-
         powers = results.get_cmb_power_spectra(pars)
         dl_lensed[:,:,i] = powers['total']
 
-    dl_sample = {'num_sample':num_sample, 'dl_lensed':dl_lensed}
+    dl_sample = {'num_sample':num_sample, 'lmax':lmax, 'dl_lensed':dl_lensed}
+
+    if not (output_root is None):
+        pickle.dump(dl_sample, open(output_root+".pkl", "wb"))
 
     return dl_sample
