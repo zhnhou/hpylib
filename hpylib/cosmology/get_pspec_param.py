@@ -26,7 +26,7 @@ def get_params(path, prefix):
 
     return d
 
-def calc_pspec(param, lmax=None, output_root=None):
+def calc_pspec(param, lmax=None, output_root=None, TCMB=2.725):
 
     num_sample = param['num_sample']
 
@@ -47,7 +47,7 @@ def calc_pspec(param, lmax=None, output_root=None):
 
         results = camb.get_results(pars)
         powers = results.get_cmb_power_spectra(pars)
-        dl_lensed[:,:,i] = powers['total']
+        dl_lensed[:,:,i] = powers['total'] * TCMB**2
 
     dl_sample = {'num_sample':num_sample, 'lmax':lmax, 'dl_lensed':dl_lensed}
 
