@@ -34,6 +34,6 @@ def read_spt_bandpower(path):
         dbs_fgsub[i] = dbs[i] - sum(winfunc[:,i]*dls_fg)
 
 
-    d = {'num_band':num_band, 'band':band, 'dbs':dbs, 'err':err, 'dbs_fgsub',dbs_fgsub}
+    d = {'num_band':num_band, 'band':band, 'dbs':dbs, 'err':err, 'dbs_fgsub':dbs_fgsub}
 
     return d
