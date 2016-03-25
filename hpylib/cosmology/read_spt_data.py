@@ -19,7 +19,7 @@ def read_spt_bandpower(path):
 
     dls_sz = np.loadtxt(path+'/fg/dl_shaw_tsz_s10_153ghz.txt', dtype=np.float64, usecols=[1])
     dls_ps = np.loadtxt(path+'/fg/dl_poisson_point_source.txt', dtype=np.float64, usecols=[1])
-    dls_cl = np.loadtxt(path+'/fg/dl_0p8', dtype=np.float64, usecols=[1])
+    dls_cl = np.loadtxt(path+'/fg/dl_0p8.txt', dtype=np.float64, usecols=[1])
     
     tmp = np.loadtxt(path+'windows/window_1', dtype=np.float64)
     winminell = int(tmp[0,0])
