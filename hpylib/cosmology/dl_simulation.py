@@ -21,10 +21,10 @@ def read_dl_simulation(path, prefix, nsims, suffix=None, file_ext='txt', has_pol
             else:
                 dl_all = np.zeros((nsims,lmax+1), dtype=np.float64)
                 
-    if has_pol:
-        dl_all[i,:,:] = tmp[:,:]
-    else:
-        dl_all[i,:] = tmp[:]
+        if has_pol:
+            dl_all[i,:,:] = tmp[:,:]
+        else:
+            dl_all[i,:] = tmp[:]
 
     dl_ave = np.mean(dl_all, axis=0)
 
