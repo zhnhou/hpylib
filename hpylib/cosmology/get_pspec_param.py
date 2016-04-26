@@ -35,6 +35,10 @@ def calc_pspec(param, lmax=None, output_root=None, TCMB=2.725):
 
     dl_lensed = np.zeros((lmax+1,4,num_sample))
 
+    clkk_all = np.zeros((lmax+1,num_sample))
+    kh_all = np.zeros((400,num_sample))
+    pk_all = np.zeros((400,num_sample))
+
     for i in np.arange(num_sample):
         pars = camb.CAMBparams()
         pars.set_cosmology(H0=param['H0'][i], ombh2=param['omegabh2'][i], omch2=param['omegach2'][i], 
@@ -42,14 +46,24 @@ def calc_pspec(param, lmax=None, output_root=None, TCMB=2.725):
         tau=param['tau'][i])
 
         pars.InitPower.set_params(ns=param['ns'][i], As=param['A'][i]*1e-9)
+        pars.set_matter_power(redshifts=[0.0], kmax=2.0)
+        pars.NonLinear = model.NonLinear_none
 
         pars.set_for_lmax(lmax, lens_potential_accuracy=1)
 
         results = camb.get_results(pars)
         powers = results.get_cmb_power_spectra(pars)
+        clkk_all[:,i] = results.get_lens_potential_cls(lmax=lmax)[:,0]
+
+        kh, z, pk = results.get_matter_power_spectrum(minkh=1e-6, maxkh=2, npoints=400)
+
+        kh_all[:,i] = kh
+        pk_all[:,i] = pk
         dl_lensed[:,:,i] = powers['total'] * TCMB**2
 
-    dl_sample = {'num_sample':num_sample, 'lmax':lmax, 'dl_lensed':dl_lensed}
+        print i, '/', num_sample
+
+    dl_sample = {'num_sample':num_sample, 'lmax':lmax, 'dl_lensed':dl_lensed, 'cl_lenspoten':clkk_all, 'kh':kh_all, 'pk':pk_all}
 
     if not (output_root is None):
         pickle.dump(dl_sample, open(output_root+".pkl", "wb"))
