@@ -37,4 +37,6 @@ def write_cosmoslik_chain_txt(slik_chain, output_prefix):
 
     with open(output_prefix+'.txt','w') as f:
         for i in np.arange(0,num_sample):
-            f.write("100%18.9E\n"% slik_chain['chain'][:,i])
+            for j in np.arange(0,num_parameter):
+                f.write("%18.9E"% slik_chain['chain'][j,i])
+            f.write("\n")
