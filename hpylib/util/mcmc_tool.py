@@ -1,6 +1,6 @@
 import numpy as np
 
-def read_cosmoslik_chain_txt(chain_file):
+def read_cosmoslik_chain_txt(chain_file, mnu_planck_default=False):
     with open(chain_file, 'r') as f:
         line = f.readline()
 
@@ -8,18 +8,22 @@ def read_cosmoslik_chain_txt(chain_file):
     txt = np.loadtxt(chain_file, skiprows=1)
 
     pname_chain = ['weight','lnl','cosmo.ombh2','cosmo.omch2','cosmo.theta','cosmo.ns','cosmo.logA','cosmo.H0','cosmo.Yp','cosmo.tau']
-    pname_output = ['weight','loglike','omegabh2','omegach2','theta','ns','logA','H0','Yp','tau']
+    pname_output = ['weight','loglike','omegabh2','omegach2','theta','ns','logA','H0','Yp','tau','mnu']
 
     num_sample = txt.shape[0]
-    num_param = np.shape(pname_chain)[0]
+    num_param = np.shape(pname_output)[0]
 
     tmp = np.zeros((num_param, num_sample), dtype=np.float64)
+    print num_param, num_sample
 
     i = 0
     for pname in pname_chain:
         ip = param.index(pname)
-        tmp[i,:] = txt[:,ip]
+        tmp[i,0:num_sample] = txt[0:num_sample,ip]
         i += 1
+
+    if (mnu_planck_default):
+        tmp[num_param-1,:] = 0.0600e0
 
     d = {'paramname':pname_output, 'chain':tmp, 'num_sample':num_sample, 'num_parameter':num_param}
 
@@ -37,4 +41,6 @@ def write_cosmoslik_chain_txt(slik_chain, output_prefix):
 
     with open(output_prefix+'.txt','w') as f:
         for i in np.arange(0,num_sample):
-            f.write("100%18.9E\n"% slik_chain['chain'][:,i])
+            for j in np.arange(0,num_parameter):
+                f.write("%18.9E"% slik_chain['chain'][j,i])
+            f.write("\n")
