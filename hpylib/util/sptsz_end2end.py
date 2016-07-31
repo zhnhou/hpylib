@@ -17,18 +17,25 @@ def restore_end_save(savfile, ellmin=None, ellmax=None):
     if (not ellmax):
         ellmax = bands[-1]
 
-    num_bands = int(n[key[0]]['num_bands'][0])
-    dbs_data = n[key[0]]['dbs_data_combined'][0]
-    dbs_sims = n[key[0]]['dbs_sims_combined'][0] # (nsims, nspecs, nbands)
+    index1 = bands >= ellmin
+    index2 = bands <= ellmax
+
+    index = index1 * index2
+
+    bands = bands[index]
+    num_bands = len(bands)
+
+    dbs_data = n[key[0]]['dbs_data_combined'][0][:,index]
+    dbs_sims = n[key[0]]['dbs_sims_combined'][0][:,:,index] # (nsims, nspecs, nbands)
 
     winminell = int(n[key[0]]['winminell'][0])
     winmaxell = int(n[key[0]]['winmaxell'][0])
 
-    winfunc_data = n[key[0]]['winfunc_data_combined'][0]
-    winfunc_sims = n[key[0]]['winfunc_sims_combined'][0]
+    winfunc_data = n[key[0]]['winfunc_data_combined'][0][:,index,:] # (nspecs, nbands, nell_wf)
+    winfunc_sims = n[key[0]]['winfunc_sims_combined'][0][:,index,:]
 
-    cov_sv    = n[key[0]]['cov_sv_combined'][0]
-    cov_noise = n[key[0]]['cov_noise_combined'][0]
+    cov_sv    = n[key[0]]['cov_sv_combined'][0][:,index,:,index]
+    cov_noise = n[key[0]]['cov_noise_combined'][0][:,index,:,index]
 
     d = {'num_bands':num_bands, 'bands':bands, 
          'dbs_data':dbs_data, 'dbs_sims':dbs_sims,

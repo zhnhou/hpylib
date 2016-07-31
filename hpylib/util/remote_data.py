@@ -30,6 +30,11 @@ def sync_from_remote(hostname, filename, update=False):
     # filename is the file name including the absolute path on remote machine
 
     home_path = os.getenv('HOME')+'/'
+    host_name = os.getenv('ENV_HOSTNAME')
+
+    if (host_name == hostname):
+        return filename
+
     user, url = info_host(hostname)
     dat_pastr = '/data_'+str.lower(hostname)+'/'
     sub_index = filename.find(dat_pastr)
